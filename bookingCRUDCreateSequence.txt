@@ -1,0 +1,23 @@
+sequenceDiagram
+    participant index as index.mjs
+    participant reservCont as reservationController.mjs
+    participant auth as authManager.mjs
+    participant verifyData as verifyData.mjs
+    participant createR as createReservation.mjs
+    Note left of index: Create request handling
+    Note right of index: Determine type of request (POST)
+    index->>+reservCont: event
+    reservCont-->>+auth: accessToken
+    Note right of reservCont: Is user part of custom.group?
+    auth-->>-reservCont: true
+    reservCont-->>+verifyData: event
+    Note right of auth: Handle parsing, verify correct data 
+    verifyData-->>-reservCont: parsedEvent
+    reservCont->>+createR: parsedEvent
+    Note right of verifyData: Prepare item, DynamoDB put-item, await response
+    createR->>+reservCont: 201: Created
+
+ 
+    
+
+    
